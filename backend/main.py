@@ -29,6 +29,33 @@ def create_dontact():
 
     return (jsonify({"Message": "Contact created successfully"}), 201)
 
+@app.route('/update_contact/<int:user_id>', methods=["PUT"])
+def update_contact(user_id):
+    contact = Contact.query.get(user_id)
+
+    if not contact:
+        return jsonify({"Message": "Contact not found"}), 404
+    
+    data = request.json
+    contact.first_name = data('first_name', contact.first_name)
+    contact.last_name = data('last_name', contact.last_name)
+    contact.email = data('email', contact.email)
+
+    db.session.commit()
+
+    return jsonify({"message": "User updated."}, 200)
+
+@app.route('/delete_contact/<int:user_id>', methods=["DELETE"])
+def delete_contact(user_id):
+    contact = Contact.query.get(user_id)
+
+    if not contact:
+        return jsonify({"message": "Contact not found"}), 404
+    
+    db.session.delete(contact)
+    db.session.commit()
+
+    return jsonify({"message": "Contact deleted."}, 200)
 
 if __name__ == "__main__":
     with app.app_context():
