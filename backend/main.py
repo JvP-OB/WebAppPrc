@@ -12,7 +12,7 @@ def get_contacts():
 
 
 @app.route("/create_contact", methods=["POST"])
-def create_dontact():
+def create_contact():
     first_name = request.json.get("first_name")
     last_name = request.json.get("last_name")
     email = request.json.get("email")
@@ -37,13 +37,14 @@ def update_contact(user_id):
         return jsonify({"Message": "Contact not found"}), 404
     
     data = request.json
-    contact.first_name = data('first_name', contact.first_name)
-    contact.last_name = data('last_name', contact.last_name)
-    contact.email = data('email', contact.email)
+    contact.first_name = data.get('first_name', contact.first_name)
+    contact.last_name = data.get('last_name', contact.last_name)
+    contact.email = data.get('email', contact.email)
+
 
     db.session.commit()
 
-    return jsonify({"message": "User updated."}, 200)
+    return jsonify({"message": "User updated."}), 200
 
 @app.route('/delete_contact/<int:user_id>', methods=["DELETE"])
 def delete_contact(user_id):
@@ -55,7 +56,7 @@ def delete_contact(user_id):
     db.session.delete(contact)
     db.session.commit()
 
-    return jsonify({"message": "Contact deleted."}, 200)
+    return jsonify({"message": "Contact deleted."}), 200
 
 if __name__ == "__main__":
     with app.app_context():
