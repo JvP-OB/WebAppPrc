@@ -20,7 +20,7 @@ def create_contact():
     if not first_name or not last_name or not email:
         return (jsonify({"Message": "Missing required fields"}), 400)
 
-    new_contact = Contact(first_name, last_name, email)
+    new_contact = Contact(first_name=first_name, last_name=last_name, email=email)
     try:
         db.session.add(new_contact)
         db.session.commit()
